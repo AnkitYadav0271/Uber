@@ -1,4 +1,4 @@
-Here's a complete GitHub-flavored Markdown documentation for your `/users/register` API endpoint, ready to copy-paste:
+
 
 ```markdown
 # API Endpoint: `POST /users/register`
@@ -170,14 +170,3 @@ npm run test:register
 curl -X POST http://localhost:4000/users/register -H "Content-Type: application/json" -d '{"firstName":"Test","email":"test@example.com","password":"test123"}'
 ```
 ```
-
-This markdown is GitHub-optimized with:
-- ✅ Clean tables with proper alignment
-- ✅ Collapsible code blocks
-- ✅ Emoji icons for visual hierarchy  
-- ✅ Complete request/response examples
-- ✅ Security notes section
-- ✅ Ready-to-copy cURL and JS examples
-- ✅ Rate limiting and headers info
-
-Perfect for your API docs repo! Would you like me to create similar docs for other endpoints like login or profile update?
