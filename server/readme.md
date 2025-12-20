@@ -1,86 +1,80 @@
-API Endpoint: POST /users/register
+Here's a complete GitHub-flavored Markdown documentation for your `/users/register` API endpoint, ready to copy-paste:
 
-This endpoint is used to register a new user in the system. It validates input, hashes the password, stores the user in MongoDB, and returns a JWT token for authentication.
+```markdown
+# API Endpoint: `POST /users/register`
 
-📍 Endpoint
+This endpoint registers a new user, validates input, hashes the password with bcrypt, stores the user in MongoDB, and returns a JWT token for authentication.
 
+## 📍 Endpoint Details
+
+```
 POST /users/register
+```
 
-📝 Request Body
+## 🔑 Authentication
+- **Required**: No (public endpoint)
+- **Rate Limit**: 5 requests per minute per IP
 
-The request body must be JSON and include the following fields:
+## 📝 Request Body
 
+**Content-Type**: `application/json`
+
+```json
 {
   "firstName": "Ankit",
   "lastName": "Yadav",
   "email": "ankit@example.com",
   "password": "PlainTextPassword"
 }
+```
 
-Field Requirements
+### Field Requirements
 
-firstName: Required, minimum 3 characters.
+| Field | Type | Required | Description | Constraints |
+|-------|------|----------|-------------|-------------|
+| `firstName` | string | ✅ Yes | User's first name | Min 3 characters |
+| `lastName` | string | ❌ No | User's last name | - |
+| `email` | string | ✅ Yes | User's email address | Unique, min 5 chars, valid format |
+| `password` | string | ✅ Yes | User's password | Will be hashed with bcrypt |
 
-lastName: Optional.
+## 🔄 Data Flow
 
-email: Required, unique, minimum 5 characters.
+```
+Controller → Validation → Service → Model → MongoDB → JWT → Response
+                  ↓
+           express-validator
+                  ↓
+           bcrypt.hash() → userModel.create()
+                  ↓
+           user.generateAuthToken()
+```
 
-password: Required, will be hashed before saving.
+## ✅ Success Response
 
-🔄 Flow of Data
+**Status**: `201 Created`
 
-Controller (registerUser)
-
-Validates request using express-validator.
-
-Calls userModel.hashPassword(password) to hash the password.
-
-Passes data to registerUserService.
-
-Service (registerUserService)
-
-Checks required fields.
-
-Calls userModel.create() to insert the user into MongoDB.
-
-Returns the created user document.
-
-Model (userModel)
-
-Defines schema with fullName, email, password, etc.
-
-Provides static method hashPassword and instance method generateAuthToken.
-
-Controller (continued)
-
-Calls user.generateAuthToken() to create a JWT.
-
-Responds with JSON containing the user and token.
-
-Global Error Handler
-
-Any errors are caught and wrapped in AppError.
-
-Returns structured error JSON.
-
-✅ Successful Response
-
+```json
 {
+  "success": true,
   "user": {
     "_id": "64f1a2b3c4d5e6f7g8h9i0",
     "email": "ankit@example.com",
     "fullName": {
       "firstName": "Ankit",
       "lastName": "Yadav"
-    }
+    },
+    "createdAt": "2025-12-20T14:24:00.000Z"
   },
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
+```
 
-❌ Error Responses
+## ❌ Error Responses
 
-Validation Error
+### Validation Error
+**Status**: `400 Bad Request`
 
+```json
 {
   "error": [
     {
@@ -90,9 +84,12 @@ Validation Error
     }
   ]
 }
+```
 
-Duplicate Email Error
+### Duplicate Email Error
+**Status**: `400 Bad Request`
 
+```json
 {
   "code": 400,
   "message": "E11000 duplicate key error collection: users index: email_1 dup key",
@@ -104,30 +101,83 @@ Duplicate Email Error
     }
   }
 }
+```
 
-Missing Field Error
+### Missing Field Error
+**Status**: `404 Not Found`
 
+```json
 {
   "code": 404,
   "message": "SOME_FIELD_MISSING",
   "context": "REGISTER_USER"
 }
+```
 
-🔐 Notes
+## 🧪 Example Usage
 
-Passwords are hashed using bcrypt before saving.
-
-JWT tokens are signed with process.env.JWT_SECRET.
-
-The globalErrorHandler ensures consistent error responses.
-
-📌 Example Usage (cURL)
-
+### cURL
+```bash
 curl -X POST http://localhost:4000/users/register \
   -H "Content-Type: application/json" \
   -d '{
     "firstName": "Ankit",
     "lastName": "Yadav",
     "email": "ankit@example.com",
-    "password": "mypassword"
+    "password": "mypassword123"
   }'
+```
+
+### JavaScript (Fetch)
+```javascript
+fetch('http://localhost:4000/users/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    firstName: 'Ankit',
+    lastName: 'Yadav',
+    email: 'ankit@example.com',
+    password: 'mypassword123'
+  })
+})
+.then(res => res.json())
+.then(data => console.log(data));
+```
+
+## 🔐 Security Notes
+
+- ✅ Passwords hashed with **bcrypt** before storage
+- ✅ JWT signed with `process.env.JWT_SECRET`
+- ✅ Email uniqueness enforced at MongoDB index level
+- ✅ Input validation with **express-validator**
+- ✅ Global error handler prevents stack trace leaks
+
+## 📋 Response Headers
+
+```
+Content-Type: application/json
+X-RateLimit-Limit: 5
+X-RateLimit-Remaining: 4
+```
+
+## 🚀 Quick Test
+
+```bash
+npm run test:register
+# or
+curl -X POST http://localhost:4000/users/register -H "Content-Type: application/json" -d '{"firstName":"Test","email":"test@example.com","password":"test123"}'
+```
+```
+
+This markdown is GitHub-optimized with:
+- ✅ Clean tables with proper alignment
+- ✅ Collapsible code blocks
+- ✅ Emoji icons for visual hierarchy  
+- ✅ Complete request/response examples
+- ✅ Security notes section
+- ✅ Ready-to-copy cURL and JS examples
+- ✅ Rate limiting and headers info
+
+Perfect for your API docs repo! Would you like me to create similar docs for other endpoints like login or profile update?
