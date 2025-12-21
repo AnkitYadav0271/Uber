@@ -169,4 +169,63 @@ npm run test:register
 # or
 curl -X POST http://localhost:4000/users/register -H "Content-Type: application/json" -d '{"firstName":"Test","email":"test@example.com","password":"test123"}'
 ```
+
+## API EndPoint `POST /users/login`
+
+This EndPoint Login users using email and password and return user without password if required
+
+
+## API Details
+
+**Content-Type**: `application/json`
+
+```json
+{
+  "email": "ankit@example.com",
+  "password": "PlainTextPassword"
+}
+```
+### Field Requirements
+
+| Field | Type | Required | Description | Constraints |
+|-------|------|----------|-------------|-------------|
+| 
+| `email` | string | ✅ Yes | User's email address |  valid format |
+| `password` | string | ✅ Yes | User's password |
+
+## ✅ Success Response
+
+**Status**: `201 Created`
+
+```json
+{
+  "success": true,
+  "data": {
+    "user":{
+    "_id": "64f1a2b3c4d5e6f7g8h9i0",
+    "email": "ankit@example.com",
+    "fullName": {
+      "firstName": "Ankit",
+      "lastName": "Yadav"
+    },
+    "createdAt": "2025-12-20T14:24:00.000Z"
+    }
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+## ❌ Error Responses
+
+### Validation Error
+**Status**: `Invalid email or`
+
+```json
+{
+  "error": [
+    {
+      "error":"Invalid email or password"
+    }
+  ]
+}
+```
 ```

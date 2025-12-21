@@ -43,13 +43,13 @@ userSchema.methods.generateAuthToken = async function () {
   }
 };
 
-userSchema.statics.comparePassword = async (password) => {
+userSchema.methods.comparePassword = async function (password) {
   try {
-    return await bcrypt.compare(password, this.password);
+    return bcrypt.compare(password, this.password);
   } catch (err) {
     throw AppError.from(
       err,
-      "ERROR_IN_COMPARING_PASSWORD",
+      401,
       "TRYING_TO_COMPARE_PASSWORD"
     );
   }
@@ -61,7 +61,7 @@ userSchema.statics.hashPassword = async function(password) {
   } catch (err) {
     throw AppError.from(
       err,
-      "ERROR_WHILE_BCRYPT_HASH",
+      401,
       "TRYING_TO_HASH_PASSWORD"
     );
   }
