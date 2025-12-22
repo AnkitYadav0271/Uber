@@ -1,9 +1,11 @@
 import userModel from "../model/user.model.js";
 import { validationResult } from "express-validator";
 import {
+  authProfileService,
   loginUserService,
   registerUserService,
 } from "../services/user.services.js";
+import { AppError } from "../utils/central.error.handler.js";
 
 export function sayHi(req, res) {
   res.send("Hi server :)");
@@ -46,3 +48,23 @@ export const loginUserController = async (req, res, next) => {
     next(err);
   }
 };
+
+//________________Login controller ends here _______________________//
+
+//*_________________getProfile controller starts here _______________________//
+
+export const authProfileController = async (req, res, next) => {
+  try {
+    let user = await authProfileService(req);
+    return res.status(200).json({
+      success: true,
+      data: {
+        user: user,
+      },
+    });
+  } catch (err) {
+    next(AppError.from(err, 401, "TRYING_TO_LOGIN_WITH_COOKIES"));
+  }
+};
+
+//*_________________getProfile controller ends here _______________________//

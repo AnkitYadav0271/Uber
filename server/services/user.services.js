@@ -38,11 +38,11 @@ export const loginUserService = async ({ email, password }) => {
   try {
     let user = await userModel.findOne({ email }).select("+password");
     if (!user) {
-      throw new Error( "Invalid Email or Password");
+      throw new Error("Invalid Email or Password");
     }
 
     let matchPassword = await user.comparePassword(password);
-    console.log("Logging Match Password :)",matchPassword);
+    console.log("Logging Match Password :)", matchPassword);
     if (!matchPassword) {
       throw new Error("Invalid Email or Password");
     }
@@ -53,3 +53,21 @@ export const loginUserService = async ({ email, password }) => {
     throw AppError.from(err, 401, "TRYING_TO_LOGIN_USER", { email });
   }
 };
+
+//*_______________ Login User Service Ends  here _______________//
+
+//*_______________ getUser service Ends starts here _______________//
+
+export const authProfileService = async ({userId}) => {
+  try {
+    let user = await userModel.findOne({ _id: userId });
+    if (!user) {
+      throw new Error("Unauthorized access");
+    }
+    return user;
+  } catch (err) {
+    throw AppError.from(err, 401, "TRYING_TO_LOGIN_WITH_COOKIE");
+  }
+};
+
+//*_______________  getUserProfile Ends  here _______________//
