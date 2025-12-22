@@ -253,6 +253,7 @@ This EndPoint Login users using email and password and return user without passw
   statusCode:401,
   message:"Unauthorized access",
   context:"TRYING_TO_LOGIN_WITH_COOKIES"
-}```
+}
+```
 
 ```

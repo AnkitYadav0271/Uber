@@ -1,5 +1,6 @@
 import userModel from "../model/user.model.js";
 import { AppError } from "../utils/central.error.handler.js";
+import { blackListToken } from "./blacklist.token.service.js";
 
 //*________________Register User Service starts here _______________//
 export const registerUserService = async ({
@@ -58,7 +59,7 @@ export const loginUserService = async ({ email, password }) => {
 
 //*_______________ getUser service Ends starts here _______________//
 
-export const authProfileService = async ({userId}) => {
+export const authProfileService = async ({ userId }) => {
   try {
     let user = await userModel.findOne({ _id: userId });
     if (!user) {
@@ -70,4 +71,17 @@ export const authProfileService = async ({userId}) => {
   }
 };
 
-//*_______________  getUserProfile Ends  here _______________//
+//_______________  getUserProfile service Ends  here _______________//
+
+//*_______________  logOut user service starts  here _______________//
+
+export const logoutUserService = (token) => {
+  try {
+    let result = blackListToken(token);
+    return result;
+  } catch (err) {
+    throw new AppError(err, 400, "TRYING_TO_LOGOUT_USER");
+  }
+};
+
+//_______________  logOut User service Ends  here _______________//
