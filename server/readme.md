@@ -217,7 +217,7 @@ This EndPoint Login users using email and password and return user without passw
 ## ❌ Error Responses
 
 ### Validation Error
-**Status**: `Invalid email or`
+**Status**: `Invalid email or Password`
 
 ```json
 {
@@ -228,4 +228,31 @@ This EndPoint Login users using email and password and return user without passw
   ]
 }
 ```
+
+## API EndPoint `POST /users/login`
+### This EndPoint takes cookies or authToken bearer type to check if user is loggedIn or not 
+
+
+#### On Success it returns user with ✅
+```json
+{
+  success: true
+  user:{
+    fullName:{
+      firstName:"Ankit",
+      lastName:"Yadav"
+    },
+    email:"test@gmail.com",
+    _id:"some_string_of_id"
+  }
+}
+```
+### ❌ Error Response
+```json
+ {
+  statusCode:401,
+  message:"Unauthorized access",
+  context:"TRYING_TO_LOGIN_WITH_COOKIES"
+}```
+
 ```
