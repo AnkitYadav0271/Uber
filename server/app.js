@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import connectToDB from "./db/db.js";
 import userRoute from "./routes/user.routes.js";
 import { globalErrorHandler } from "./middleware/global.error.handler.js";
+import captainRoute from "./routes/captain.routes.js";
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
 app.use("/users/", userRoute);
+app.use("/captain",captainRoute);
 
 
 

@@ -37,7 +37,7 @@ userSchema.methods.generateAuthToken = async function () {
   } catch (err) {
     throw AppError.from(
       err,
-      "ERROR_IN_GENERATING_JWT_CODE",
+      401,
       "TRYING_TO_CREATE_JWT"
     );
   }
