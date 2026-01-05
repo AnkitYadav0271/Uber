@@ -43,12 +43,11 @@ export const loginUserService = async ({ email, password }) => {
     }
 
     let matchPassword = await user.comparePassword(password);
-    console.log("Logging Match Password :)", matchPassword);
     if (!matchPassword) {
       throw new Error("Invalid Email or Password");
     }
 
-    user.password = undefined;
+    user.password = null;
     return user;
   } catch (err) {
     throw AppError.from(err, 401, "TRYING_TO_LOGIN_USER", { email });

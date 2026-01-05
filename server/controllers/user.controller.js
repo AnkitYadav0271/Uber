@@ -63,6 +63,7 @@ export const loginUserController = async (req, res, next) => {
 
 export const authProfileController = async (req, res, next) => {
   try {
+    //! i think here is some issue because service requires token but it's giving userId
     let userId = req.userId;
     if (checkBlackListToken(userId)) {
       throw new Error("Unauthorized access");

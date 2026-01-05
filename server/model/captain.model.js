@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { AppError } from "../utils/central.error.handler";
+import { AppError } from "../utils/central.error.handler.js";
 
 const captainSchema = new mongoose.Schema({
   fullName: {
-    fistName: {
+    firstName: {
       type: String,
       required: true,
       min: [3, "first Name must be more than 3 chars"],
@@ -83,17 +83,18 @@ captainSchema.methods.generateAuthToken = async function () {
 
 captainSchema.methods.comparePassword = async function (password) {
   try {
-    return await bcrypt.compare(this.password, password);
+    console.log("password :)", password);
+    return bcrypt.compare(password, this.password);
   } catch (err) {
     throw AppError.from(err, 401, "Problem in comparing password");
   }
 };
 
-captainSchema.methods.hashPassword = async function (password) {
+captainSchema.statics.hashPassword = async function (password) {
   try {
     return await bcrypt.hash(password, 10);
   } catch (err) {
-    throw AppError.from(err, 401, "Problem hashing password");
+    throw AppError.from(err, 401, "Problem in hashing password");
   }
 };
 const captainModel = mongoose.model("captain", captainSchema);
